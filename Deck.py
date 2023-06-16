@@ -27,7 +27,7 @@ class Deck:
     
     def saveDeck(self, filename):
         with open(filename, 'w') as outfile:
-            json.dump(self, outfile, default=lambda o: o.__dict__, sort_keys=True, indent=4)
+            json.dump(self, outfile, default=lambda o: o.__dict__, sort_keys=False, indent=4)
         return True
     
     def loadDeck(self, filename):
