@@ -69,14 +69,15 @@ def deckMenu(stdscr, deck):
         stdscr.addstr(3, 4, "2. Add card")
         stdscr.addstr(4, 4, "3. Study deck")
         stdscr.addstr(5, 4, "4. Save deck")
-        stdscr.addstr(6, 4, "5. Exit")
+        stdscr.addstr(6, 4, "5. Back to main menu")
+        stdscr.addstr(7, 0, "0. Exit LearnIt!")
         userInput = None
         while userInput == None:
             userInput = chr(stdscr.getch(8, 0))
             if userInput == '1':
                 if len(deck.cards) == 0:
                     stdscr.deleteln()
-                    stdscr.addstr(7, 0, "There are no cards in this deck to view")
+                    stdscr.addstr(8, 0, "There are no cards in this deck to view")
                     userInput = None
                     stdscr.refresh()
                 else:
@@ -89,7 +90,7 @@ def deckMenu(stdscr, deck):
             elif userInput == '3':
                 if len(deck.cards) == 0:
                     stdscr.deleteln()
-                    stdscr.addstr(7, 0, "There are no cards in this deck to study")
+                    stdscr.addstr(8, 0, "There are no cards in this deck to study")
                     userInput = None
                     stdscr.refresh()
                 else:
@@ -102,6 +103,8 @@ def deckMenu(stdscr, deck):
             elif userInput == '5':
                 running = False
                 break
+            elif userInput == '0':
+                program_exit(stdscr, deck)
             else:
                 stdscr.deleteln()
                 userInput = None
@@ -186,7 +189,7 @@ def newCard(stdscr):
     choices_str = choices_str.split('\#')
     choices = []
     for i in range(len(choices_str)):
-        choices.append((i+1, choices_str[i]))
+        choices.append((str(i+1), choices_str[i]))
     answer = list(map(str, answer_str.split(',')))
     card = Card(question, choices, answer)
     return card
@@ -250,6 +253,7 @@ def studyDeck(stdscr, deck):
         stdscr.addstr(1, 0, "Would you like to continue studying?")
         stdscr.addstr(2, 0, "1. Yes")
         stdscr.addstr(3, 0, "2. No (Return to deck menu)")
+        stdscr.addstr(4, 0, "3. Exit LearnIt!")
         userInput = None
         while userInput == None:
             userInput = chr(stdscr.getch(5,0))
@@ -258,12 +262,35 @@ def studyDeck(stdscr, deck):
             elif userInput == '2':
                 running = False
                 break
+            elif userInput == '3':
+                program_exit(stdscr, deck)
             else:
                 stdscr.deleteln()
                 userInput = None
                 stdscr.refresh()
         stdscr.clear()
         stdscr.refresh()
+
+def program_exit(stdscr, deck):
+    stdscr.clear()
+    stdscr.refresh()
+    stdscr.addstr(0, 0, "Would you like to save your deck?")
+    stdscr.addstr(1, 0, "1. Yes")
+    stdscr.addstr(2, 0, "2. No")
+    userInput = None
+    while userInput == None:
+        userInput = chr(stdscr.getch(3,0))
+        if userInput == '1':
+            deck.saveDeck()
+            break
+        elif userInput == '2':
+            break
+        else:
+            stdscr.deleteln()
+            userInput = None
+            stdscr.refresh()
+    curses.endwin()
+    exit()
 
 def main(stdscr):
     curses.echo()
