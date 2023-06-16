@@ -275,8 +275,12 @@ def studyList(stdscr, study_list, curr_list):
                 for i in range(len(choices)):
                     line_y += 2
                     if choices[i][0] in curr_list[index].getAnswer():
+                        if choices[i][0] in matched_answer:
+                            stdscr.addstr(line_y, 2, "O", correct_text)
                         stdscr.addstr(line_y, 4, f"({i+1}) {choices[i][1]}", correct_text)
                     else:
+                        if choices[i][0] in matched_answer:
+                            stdscr.addstr(line_y, 2, "X", incorrect_text)
                         stdscr.addstr(line_y, 4, f"({i+1}) {choices[i][1]}", incorrect_text)
             stdscr.addstr(line_y+2, 0, "Press any key to continue.")
             stdscr.getch(line_y+2, 27)
